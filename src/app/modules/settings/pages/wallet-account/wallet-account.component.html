@@ -1,0 +1,167 @@
+<section class="container mx-auto p-4">
+  <section class="w-full">
+    <nz-breadcrumb class="flex">
+      <nz-breadcrumb-item class="flex items-center">
+        <a class="flex items-center" routerLink="/">
+          <i class="fa-solid fa-home"></i>
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item class="flex items-center">
+        <a class="flex items-center">
+          ...
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item class="flex items-center">
+        <a class="flex items-center" [routerLink]="['/settings/wallets', (wallet$ | async)?._id]">
+          {{ (wallet$ | async)?.name }}
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item class="flex items-center">
+        <a class="flex items-center">
+          {{ (account$ | async)?.name }}
+        </a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </section>
+</section>
+
+<section class="w-full flex justify-center items-center pb-4">
+
+  <div class="max-w-lg w-full">
+    <section *ngIf="account$ | async as account" class="col-span-1 px-4">
+      <nz-card class="w-full ant-card-no-padding mb-4" nzTitle="Account">
+        <nz-list>
+          <nz-list-item class="flex flex-nowrap px-4">
+            <b class="mr-2">{{ 'COMMON_WORDS.NAME' | translate }}:</b>
+
+            <span [class.hidden]="editingName">{{ account.name }} <i (click)="editingName = true;" class="cursor-pointer ml-2 fa-solid fa-pen-to-square"></i></span>
+            <nz-input-group [class.hidden]="!editingName"
+                            [nzSuffix]="saveNewName"
+                            [nzPrefix]="cancelNewName">
+              <input type="text" nz-input [formControl]="accountNameControl">
+            </nz-input-group>
+
+            <ng-template #cancelNewName>
+              <button (click)="editingName = false" nz-button nzType="text" nzSize="small">
+                <i class="fa-solid fa-times"></i>
+              </button>
+            </ng-template>
+
+            <ng-template #saveNewName>
+              <button (click)="saveName()" nz-button nzType="text" nzSize="small">
+                <i class="fa-solid fa-check"></i>
+              </button>
+            </ng-template>
+          </nz-list-item>
+
+          <nz-list-item class="px-4">
+            <b>{{ 'COMMON_WORDS.PUBLIC_KEY' | translate }}:</b>
+
+            <span class="cursor-pointer" appClipboard [textToCopy]="account.publicKey">
+              {{ account.publicKey | publicKey }}
+            </span>
+          </nz-list-item>
+
+          <nz-list-item class="px-4" *ngIf="(wallet$ | async)?.type === 'mnemonic_phrase' || (wallet$ | async)?.type === 'secret_key'">
+            <b>{{ 'COMMON_WORDS.PRIVATE_KEY' | translate }}:</b>
+
+            <button (click)="copyPrivateKey()" nz-button nzSize="small">{{ 'COMMON_WORDS.COPY' | translate }}</button>
+          </nz-list-item>
+        </nz-list>
+      </nz-card>
+
+      <ng-container *ngIf="account.accountRecord as accountRecord">
+        <nz-card class="w-full ant-card-no-padding mb-4" [nzTitle]="'SETTINGS.WALLET_ACCOUNT.ACCOUNT_DETAILS.TITLE' | translate">
+          <nz-list>
+            <nz-list-item class="px-4">
+              <b>{{ 'SETTINGS.WALLET_ACCOUNT.ACCOUNT_DETAILS.SEQUENCE' | translate }}: </b>
+              <span class="cursor-pointer" appClipboard [textToCopy]="accountRecord.sequence">
+              {{ accountRecord.sequence }}
+            </span>
+            </nz-list-item>
+
+            <nz-list-item class="px-4">
+              <b>{{ 'SETTINGS.WALLET_ACCOUNT.ACCOUNT_DETAILS.SUBENTRY_COUNT' | translate }}: </b> <span>{{ accountRecord.subentry_count }} ({{ (accountRecord.subentry_count || 0) * 0.5 }} XLMs)</span>
+            </nz-list-item>
+
+            <nz-list-item class="px-4">
+              <b>{{ 'SETTINGS.WALLET_ACCOUNT.ACCOUNT_DETAILS.TOTAL_SPONSORING' | translate }}: </b> <span>{{ accountRecord.num_sponsoring }}</span>
+            </nz-list-item>
+
+            <nz-list-item class="px-4">
+              <b>{{ 'SETTINGS.WALLET_ACCOUNT.ACCOUNT_DETAILS.TOTAL_SPONSORED' | translate }}: </b> <span>{{ accountRecord.num_sponsored }}</span>
+            </nz-list-item>
+
+            <nz-list-item class="px-4" *ngIf="accountRecord.home_domain">
+              <b>{{ 'COMMON_WORDS.DOMAIN' | translate }}: </b> <span>{{ accountRecord.home_domain }}</span>
+            </nz-list-item>
+
+            <nz-list-item class="px-4" *ngIf="accountRecord.sponsor">
+              <b>{{ 'COMMON_WORDS.SPONSOR' | translate }}: </b> <span>{{ accountRecord.sponsor }}</span>
+            </nz-list-item>
+          </nz-list>
+        </nz-card>
+
+        <nz-card class="w-full ant-card-no-padding mb-4" [nzTitle]="'SETTINGS.WALLET_ACCOUNT.ACCOUNT_THRESHOLDS.TITLE' | translate">
+          <nz-list>
+            <nz-list-item class="px-4">
+              <b>{{ 'SETTINGS.WALLET_ACCOUNT.ACCOUNT_THRESHOLDS.LOW' | translate }}:</b> <span>{{ accountRecord.thresholds?.low_threshold }}</span>
+            </nz-list-item>
+            <nz-list-item class="px-4">
+              <b>{{ 'SETTINGS.WALLET_ACCOUNT.ACCOUNT_THRESHOLDS.MEDIUM' | translate }}:</b> <span>{{ accountRecord.thresholds?.med_threshold }}</span>
+            </nz-list-item>
+            <nz-list-item class="px-4">
+              <b>{{ 'SETTINGS.WALLET_ACCOUNT.ACCOUNT_THRESHOLDS.HIGH' | translate }}:</b> <span>{{ accountRecord.thresholds?.high_threshold }}</span>
+            </nz-list-item>
+          </nz-list>
+        </nz-card>
+
+        <nz-card class="w-full ant-card-no-padding mb-4" [nzTitle]="'SETTINGS.WALLET_ACCOUNT.ACCOUNT_FLAGS.TITLE' | translate">
+          <nz-list>
+            <nz-list-item class="px-4">
+              <b>{{ 'SETTINGS.WALLET_ACCOUNT.ACCOUNT_FLAGS.AUTH_REQUIRED' | translate }}:</b> <span>{{ accountRecord.flags?.auth_required }}</span>
+            </nz-list-item>
+            <nz-list-item class="px-4">
+              <b>{{ 'SETTINGS.WALLET_ACCOUNT.ACCOUNT_FLAGS.AUTH_REVOCABLE' | translate }}:</b> <span>{{ accountRecord.flags?.auth_revocable }}</span>
+            </nz-list-item>
+            <nz-list-item class="px-4">
+              <b>{{ 'SETTINGS.WALLET_ACCOUNT.ACCOUNT_FLAGS.AUTH_IMMUTABLE' | translate }}:</b> <span>{{ accountRecord.flags?.auth_immutable }}</span>
+            </nz-list-item>
+            <nz-list-item class="px-4">
+              <b>{{ 'SETTINGS.WALLET_ACCOUNT.ACCOUNT_FLAGS.AUTH_CLAWBACK_ENABLED' | translate }}:</b> <span>{{ accountRecord.flags?.auth_clawback_enabled }}</span>
+            </nz-list-item>
+          </nz-list>
+        </nz-card>
+
+        <nz-card class="w-full ant-card-no-padding mb-4" nzTitle="Account signers">
+          <nz-list>
+            <nz-list-item class="px-4" *ngFor="let signer of accountRecord.signers">
+              <b class="cursor-pointer" appClipboard [textToCopy]="signer.key">
+                {{ signer.key | publicKey }}:
+              </b>
+              <span>
+              {{ signer.type }} ({{ signer.weight }})
+            </span>
+            </nz-list-item>
+          </nz-list>
+        </nz-card>
+      </ng-container>
+
+      <section class="w-full grid grid-cols-2 grid-rows-1 gap-4">
+        <button [routerLink]="['/settings/wallets', walletId$ | async]"
+                nz-button nzSize="large"
+                class="col-span-1 row-span-1">
+          <i class="fa-solid fa-arrow-left mr-2"></i>
+          {{ 'COMMON_WORDS.GO_BACK' | translate }}
+        </button>
+
+        <button (click)="removeAccount()"
+                class="col-span-1 row-span-1"
+                nz-button nzSize="large" nzType="primary" nzDanger nzBlock>
+          {{ 'COMMON_WORDS.REMOVE' | translate }}
+        </button>
+      </section>
+    </section>
+  </div>
+
+</section>

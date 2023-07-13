@@ -1,0 +1,63 @@
+<section class="container mx-auto w-full p-4">
+  <nz-breadcrumb class="flex">
+    <nz-breadcrumb-item class="flex items-center">
+      <a class="flex items-center" routerLink="/">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item class="flex items-center">
+      <a class="flex items-center" routerLink="/settings">
+        Settings
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item class="flex items-center">
+      <a class="flex items-center">
+        Horizon Apis
+      </a>
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+</section>
+
+<section class="w-full flex justify-center items-center">
+  <div class="max-w-lg w-full">
+
+    <nz-list nzSize="large">
+      <nz-list-item *ngFor="let horizonApi of allHorizonApis$ | async"
+          (click)="onHorizonItemClicked(horizonApi)"
+          class="flex w-full cursor-pointer px-4 justify-between">
+        <div class="w-auto">
+          <p class="m-0 text-sm font-bold">
+            {{ horizonApi.name }}
+          </p>
+        </div>
+        <div class="w-auto">
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </nz-list-item>
+    </nz-list>
+
+
+
+    <div class="w-full flex flex-wrap pt-4 px-4">
+      <div class="w-full mb-4">
+        <button (click)="addNewHorizonApi()"
+                nzType="primary"
+                nzSize="large"
+                nz-button
+                nzBlock>
+          {{ 'COMMON_WORDS.ADD' | translate }} API
+        </button>
+      </div>
+
+      <div class="w-full">
+        <button routerLink="/settings"
+                nz-button
+                nzBlock
+                nzSize="large">
+          <i class="fa-solid fa-arrow-left mr-2"></i> {{ 'COMMON_WORDS.GO_BACK' | translate }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>

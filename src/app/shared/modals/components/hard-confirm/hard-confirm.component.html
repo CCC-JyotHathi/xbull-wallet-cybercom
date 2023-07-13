@@ -1,0 +1,18 @@
+<div class="w-full text-center mb-4">
+  <h2 class="m-0 p-0 text-off-white font-bold text-xl">
+    {{ title }}
+  </h2>
+</div>
+
+<div class="w-full text-center mb-7">
+  {{ alertMessage }}
+</div>
+
+<div class="w-full">
+  <button (click)="onConfirm()"
+          nzSize="large"
+          nzBlock
+          nz-button nzType="primary" nzDanger>
+    {{ 'COMMON_WORDS.REMOVE' | translate }}
+  </button>
+</div>

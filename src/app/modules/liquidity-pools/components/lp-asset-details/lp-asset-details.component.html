@@ -1,0 +1,123 @@
+<section class="flex flex-col h-full">
+  <section *ngIf="lpAssetId$ | async as lpAssetId" class="w-full text-center mb-4">
+    <h2 class="m-0 mb-2 p-0 text-off-white font-bold text-xl">
+      {{ 'LIQUIDITY_POOLS.DETAILS_TITLE' | translate }}
+    </h2>
+
+    <h4 appClipboard [textToCopy]="lpAssetId"
+        class="cursor-pointer m-2 p-0 text-off-white text-md">
+      {{ lpAssetId | publicKey }}
+    </h4>
+  </section>
+
+  <section *ngIf="reserves$ | async as reserves" class="w-full mb-4">
+    <div class="w-full flex">
+      <div *ngFor="let reserve of reserves; let i = index"
+           [class.items-end]="i === 0"
+           [class.items-start]="i === 1"
+           class="w-6/12 flex flex-col px-2">
+
+        <div class="w-8 h-8 flex bg-off-white rounded-3xl p-1.5 overflow-hidden">
+          <img class="w-full h-full"
+               *ngIf="reserve.image; else imgSkeleton"
+               [src]="reserve.image" alt=""/>
+          <ng-template #imgSkeleton>
+            <div class="w-full h-full rounded-3xl skeleton-box"></div>
+          </ng-template>
+        </div>
+
+        <div class="w-auto flex flex-col"
+             [class.items-end]="i === 0"
+             [class.items-start]="i === 1">
+          <p class="text-off-white font-semibold text-lg">
+            {{ reserve.assetCode }}
+          </p>
+
+          <p *ngIf="reserve._id === 'native'" class="text-xs">
+            native
+          </p>
+
+          <p *ngIf="reserve._id !== 'native'"
+             appClipboard [textToCopy]="$any(reserve).assetIssuer"
+             class="cursor-pointer text-xs">
+            {{ $any(reserve).assetIssuer | publicKey }}
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="w-full" *ngIf="lpAsset$ | async as lpAsset">
+    <div class="w-full flex">
+      <div *ngFor="let reserve of lpAsset.reserves; let i = index"
+           [class.text-right]="i === 0"
+           [class.text-left]="i === 1"
+           class="w-6/12 mb-4 px-2">
+        <h3 class="text-lg font-semibold">
+          TVL: {{ parseLpReserveCode(reserve) }}
+        </h3>
+
+        <p class="m-0 truncate">
+          {{ reserve.amount | number: '0.0-7'}}
+        </p>
+      </div>
+    </div>
+
+    <div class="w-full text-center mb-4">
+      <h3 class="text-lg font-semibold">
+        {{ 'LIQUIDITY_POOLS.TOTAL_SHARES' | translate }}
+      </h3>
+
+      <p class="m-0">
+        {{ lpAsset.totalShares | number: '0.0-7' }}
+      </p>
+    </div>
+
+    <div class="w-full text-center mb-4">
+      <h3 class="text-lg font-semibold">
+        {{ 'LIQUIDITY_POOLS.TOTAL_TRUSTLINES' | translate }}
+      </h3>
+
+      <p class="m-0">
+        {{ lpAsset.totalTrustlines }}
+      </p>
+    </div>
+
+    <div class="w-full text-center mb-4">
+      <h3 class="text-lg font-semibold">
+        {{ 'LIQUIDITY_POOLS.POOL_FEE' | translate }}
+      </h3>
+
+      <p class="m-0">
+        {{ lpAsset.fee_bp / 100 }}%
+      </p>
+    </div>
+  </section>
+
+  <section class="w-full mt-auto flex flex-col">
+    <!--  <div class="w-full flex mb-4">-->
+    <!--    <div class="w-6/12 pr-2">-->
+    <!--      <button nz-button nzSize="large" nzType="primary" nzBlock>-->
+    <!--        Deposit funds-->
+    <!--      </button>-->
+    <!--    </div>-->
+    <!--    <div class="w-6/12 pl-2">-->
+    <!--      <button nz-button nzSize="large" nzType="primary" nzDanger nzBlock>-->
+    <!--        Withdraw funds-->
+    <!--      </button>-->
+    <!--    </div>-->
+    <!--  </div>-->
+
+    <div class="w-full">
+      <button (click)="removeActionButton$.next()"
+              [nzLoading]="removingAsset$ | async"
+              [disabled]="disableActionButton$ | async"
+              nz-button nzSize="large"
+              nzDanger nzType="primary"
+              nzBlock>
+        {{ 'COMMON_WORDS.REMOVE' | translate }}
+      </button>
+    </div>
+  </section>
+</section>

@@ -1,0 +1,39 @@
+<section class="w-full h-full relative">
+  <div class="w-full text-center mb-4">
+    <h2 class="m-0 p-0 font-bold text-xl">
+      {{ (connectedSite$ | async)?.host }}
+    </h2>
+
+    <p class="pt-4 text-xs opacity-80">
+      {{ (connectedSite$ | async)?.origin }}
+    </p>
+  </div>
+
+  <section class="w-full mb-8">
+    <dl>
+      <dt class="text-base font-bold mb-1 w-full">Created at:</dt>
+      <dd class="opacity-80 break-all text-sm mb-3 w-full">
+        {{ (connectedSite$ | async)?.createdAt | date: 'MMM dd, yyyy' }}
+      </dd>
+
+      <dt class="text-base font-bold mb-1 w-full">Permissions:</dt>
+      <dd *ngIf="(connectedSite$ | async)?.canRequestPublicKey"
+          class="opacity-80 break-all text-sm mb-3 w-full">
+        {{ 'SITES_PERMISSIONS.GET_PUBLIC_KEY' | translate }}
+      </dd>
+      <dd *ngIf="(connectedSite$ | async)?.canRequestSign"
+          class="opacity-80 break-all text-sm mb-3 w-full">
+        {{ 'SITES_PERMISSIONS.ASK_TO_SIGN' | translate }}
+      </dd>
+    </dl>
+  </section>
+
+  <section class="w-full flex">
+    <div class="flex-1">
+      <button (click)="removeSiteRecords()" nz-button nzBlock nzSize="large" nzType="primary" nzDanger>
+        {{ 'COMMON_WORDS.REMOVE' | translate }}
+      </button>
+    </div>
+  </section>
+
+</section>

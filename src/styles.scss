@@ -1,0 +1,72 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import "theme/buttons";
+@import "theme/utils";
+@import "theme/skeleton";
+@import "theme/markdown-styles";
+
+* {
+  box-sizing: border-box !important;
+  font-family: 'Poppins', sans-serif;
+}
+
+.popup-mode {
+  height: 600px;
+  width: 375px;
+}
+
+.window-mode {
+  @apply h-screen w-screen;
+}
+
+.hide-app-send-funds {
+  background-color: transparent !important;
+
+  app-root, app-send-funds, ant-drawer-mask {
+    display: none !important;
+  }
+}
+
+.ant-image-preview-operations {
+  top: 30px;
+  justify-content: center;
+  background-color: rgba(0,0,0,0.15);
+}
+
+// iOS specific styles
+.ios .mobile .main-wrapper {
+  border-top: env(safe-area-inset-top) solid;
+  border-bottom: env(safe-area-inset-bottom) solid;
+  @apply border-gray;
+}
+
+.ios-safe-y .ant-drawer-content {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.ios .mobile .ant-image-preview-operations {
+  top: env(safe-area-inset-top);
+}
+
+.ios-safe-b .ant-drawer-content {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.ios-safe-t .ant-drawer-content {
+  padding-top: env(safe-area-inset-top);
+}
+
+.ios .mobile body {
+  @apply bg-black;
+}
+
+.ngx-charts {
+  text {
+    color: #FCFCFC !important;
+    fill: #FCFCFC !important;
+  }
+}

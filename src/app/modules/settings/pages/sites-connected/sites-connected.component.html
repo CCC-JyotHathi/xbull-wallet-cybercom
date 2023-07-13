@@ -1,0 +1,52 @@
+<section class="container mx-auto p-4">
+  <section class="w-full">
+    <nz-breadcrumb class="flex">
+      <nz-breadcrumb-item class="flex items-center">
+        <a class="flex items-center" routerLink="/">
+          <i class="fa-solid fa-home"></i>
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item class="flex items-center">
+        <a class="flex items-center" routerLink="/settings">
+          Settings
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item class="flex items-center">
+        <a class="flex items-center">
+          Connected sites
+        </a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </section>
+</section>
+
+<section class="w-full flex justify-center items-center">
+  <section class="max-w-lg w-full py-4">
+    <nz-list class="mb-4" nzSize="large">
+      <nz-list-item *ngFor="let siteConnected of sitesConnected$ | async"
+                    (click)="onSiteConnected(siteConnected)"
+                    class="cursor-pointer px-4 grid grid-rows-1 gap-4" style="grid-template-columns: 1fr auto">
+        <div class="col-span-auto row-span-1">
+          <p class="m-0 text-sm font-bold">
+            {{ siteConnected.host }}
+          </p>
+        </div>
+        <div class="col-span-auto row-span-1">
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </nz-list-item>
+    </nz-list>
+
+    <div class="w-full grid grid-cols-2 grid-rows-2 px-4 gap-4">
+      <div class="col-span-2 row-span-2">
+        <button routerLink="/settings"
+                nz-button
+                nzSize="large"
+                nzBlock>
+          <i class="fa-solid fa-arrow-left mr-2"></i>
+          {{ 'COMMON_WORDS.GO_BACK' | translate }}
+        </button>
+      </div>
+    </div>
+  </section>
+</section>

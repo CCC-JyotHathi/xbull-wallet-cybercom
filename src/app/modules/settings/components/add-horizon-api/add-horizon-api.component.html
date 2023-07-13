@@ -1,0 +1,28 @@
+<section [formGroup]="form" class="flex flex-wrap w-full">
+  <div class="w-full mb-4">
+    <input type="text" nz-input nzSize="large" class="w-full" formControlName="name" [placeholder]="'COMMON_WORDS.NAME' | translate">
+  </div>
+  <div class="w-full mb-4">
+    <nz-select class="w-full" nzSize="large" formControlName="passphrase" [nzPlaceHolder]="'FORM_PLACEHOLDERS.NETWORK_PASS' | translate" [nzDropdownMatchSelectWidth]="false">
+      <nz-option *ngFor="let option of passphraseOptions$ | async"
+                 [nzValue]="option.value"
+                 [nzLabel]="option.name">
+      </nz-option>
+    </nz-select>
+  </div>
+  <div class="w-full mb-4">
+    <input type="text" nz-input nzSize="large" class="w-full" formControlName="url" [placeholder]="'FORM_PLACEHOLDERS.HORIZON_URL' | translate">
+  </div>
+</section>
+
+<div class="w-full text-center opacity-50 mb-7">
+  *{{ 'SETTINGS.ADD_HORIZON_API.NAME_EXPLANATION' | translate }}
+</div>
+
+<div class="w-full">
+  <button (click)="onConfirm()" [disabled]="form.invalid"
+          nz-button nzSize="large" nzType="primary" nzBlock>
+    {{ 'COMMON_WORDS.CONFIRM' | translate }}
+  </button>
+</div>
+
